@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">
+        <i class="fas fa-upload text-primary"></i>
+        Upload Resume
+    </h2>
+
+    <!-- Upload Card -->
+    <div class="dashboard-card p-4 mb-4">
+
+        <form
+            action="{{ url_for('upload') }}"
+            method="POST"
+            enctype="multipart/form-data">
+
+            <div class="row g-3">
+
+                <!-- Domain Selection -->
+                <div class="col-md-4">
+
+                    <label class="form-label fw-bold">
+                        Select Domain
+                    </label>
+
+                    <select
+                        name="domain"
+                        class="form-select"
+                        required>
+
+                        <option value="" selected disabled>
+                            -- Select Domain --
+                        </option>
+
+                        <option>Python Developer</option>
+                        <option>Java Developer</option>
+                        <option>Frontend Developer</option>
+                        <option>Backend Developer</option>
+                        <option>Full Stack Developer</option>
+                        <option>Software Engineer</option>
+                        <option>AI Engineer</option>
+                        <option>Machine Learning Engineer</option>
+                        <option>Data Scientist</option>
+                        <option>Data Analyst</option>
+                        <option>Business Analyst</option>
+                        <option>Database Developer</option>
+                        <option>DevOps Engineer</option>
+                        <option>Cloud Engineer</option>
+                        <option>Cyber Security</option>
+                        <option>UI UX Designer</option>
+                        <option>QA Engineer</option>
+                        <option>Mobile App Developer</option>
+                        <option>Project Manager</option>
+                        <option>HR</option>
+                        <option>Finance</option>
+                        <option>Marketing</option>
+                        <option>Sales</option>
+                        <option>Operations</option>
+                        <option>General</option>
+
+                    </select>
+
+                </div>
+
+                <!-- Resume Upload -->
+                <div class="col-md-5">
+
+                    <label class="form-label fw-bold">
+                        Select Resume(s)
+                    </label>
+
+                    <input
+                        type="file"
+                        class="form-control"
+                        name="resume"
+                        accept=".pdf,.doc,.docx"
+                        multiple
+                        required>
+
+                    <small class="text-muted">
+                        You can upload multiple PDF, DOC or DOCX files.
+                    </small>
+
+                </div>
+
+                <!-- Upload Button -->
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary w-100">
+
+                        <i class="fas fa-upload me-2"></i>
+
+                        Upload Resume(s)
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <!-- Uploaded Resume Table -->
+
+    <div class="dashboard-card p-4">
+
+        <h4 class="mb-3">
+
+            <i class="fas fa-folder-open text-primary"></i>
+
+            Uploaded Resumes
+
+        </h4>
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th width="30%">Resume Name</th>
+
+                        <th width="20%">Selected Domain</th>
+
+                        <th width="20%">Uploaded On</th>
+
+                        <th width="10%">Status</th>
+
+                        <th width="20%" class="text-center">
+
+                            Action
+
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% if resumes %}
+
+                    {% for resume in resumes %}
+
+                    <tr>
+
+                        <td>
+
+                            <i class="fas fa-file-pdf text-danger me-2"></i>
+
+                            {{ resume.filename }}
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-info text-dark">
+
+                                {{ resume.selected_domain }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            {{ resume.date }}
+
+                        </td>
+
+                        <td>
+
+                            {% if resume.status == "Completed" %}
+
+                                <span class="badge bg-success">
+
+                                    Completed
+
+                                </span>
+
+                            {% elif resume.status == "Processing" %}
+
+                                <span class="badge bg-warning text-dark">
+
+                                    Processing...
+
+                                </span>
+
+                            {% elif resume.status == "Failed" %}
+
+                                <span class="badge bg-danger">
+
+                                    Failed
+
+                                </span>
+
+                            {% else %}
+
+                                <span class="badge bg-secondary">
+
+                                    Unknown
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <a
+                                href="{{ url_for('download_resume', stored_filename=resume.stored_filename) }}"
+                                class="btn btn-success btn-sm">
+
+                                <i class="fas fa-download"></i>
+
+                                Download
+
+                            </a>
+
+                            <a
+                                href="{{ url_for('delete_resume', stored_filename=resume.stored_filename) }}"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Delete this resume?')">
+
+                                <i class="fas fa-trash"></i>
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="5" class="text-center py-4">
+
+                            <i class="fas fa-folder-open fa-2x text-secondary mb-3"></i>
+
+                            <br>
+
+                            No resumes uploaded yet.
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

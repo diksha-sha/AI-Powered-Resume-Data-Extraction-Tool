@@ -1,0 +1,285 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <h2 class="mb-4">
+        Extracted Resume Information
+    </h2>
+
+    <div class="dashboard-card p-4">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered table-hover align-middle">
+
+                <thead class="table-light">
+
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Domain</th>
+                        <th>Education</th>
+                        <th>College</th>
+                        <th>University</th>
+                        <th>CGPA</th>
+                        <th>Experience</th>
+                        <th>Internships</th>
+                        <th>Projects</th>
+                        <th>Certifications</th>
+                        <th>Technical Skills</th>
+                        <th>Soft Skills</th>
+                        <th>Languages</th>
+                        <th>LinkedIn</th>
+                        <th>GitHub</th>
+                        <th>Portfolio</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% if resumes %}
+
+                    {% for data in resumes %}
+
+                    <tr>
+
+                        <td>{{ data.name or "NA" }}</td>
+
+                        <td>{{ data.email or "NA" }}</td>
+
+                        <td>{{ data.phone or "NA" }}</td>
+
+                        <td>{{ data.domain or "NA" }}</td>
+
+                        <td>{{ data.education or "NA" }}</td>
+
+                        <td>{{ data.college or "NA" }}</td>
+
+                        <td>{{ data.university or "NA" }}</td>
+
+                        <td>{{ data.cgpa or "NA" }}</td>
+
+                        <td>{{ data.experience or "NA" }}</td>
+
+                        <td>{{ data.internships or "NA" }}</td>
+
+                        <!-- Projects -->
+                        <td>
+
+                            {% if data.projects %}
+
+                                {% if data.projects is string %}
+
+                                    {{ data.projects }}
+
+                                {% else %}
+
+                                    <ul class="mb-0 ps-3">
+
+                                    {% for project in data.projects %}
+
+                                        {% if project is mapping %}
+
+                                            <li>
+
+                                                <strong>{{ project.title }}</strong>
+
+                                                {% if project.description %}
+                                                    - {{ project.description }}
+                                                {% endif %}
+
+                                            </li>
+
+                                        {% else %}
+
+                                            <li>{{ project }}</li>
+
+                                        {% endif %}
+
+                                    {% endfor %}
+
+                                    </ul>
+
+                                {% endif %}
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <!-- Certifications -->
+                        <td>
+
+                            {% if data.certifications %}
+
+                                {% if data.certifications is string %}
+
+                                    {{ data.certifications }}
+
+                                {% else %}
+
+                                    {{ data.certifications|join(", ") }}
+
+                                {% endif %}
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <!-- Technical Skills -->
+                        <td>
+
+                            {% if data.technical_skills %}
+
+                                {% if data.technical_skills is string %}
+
+                                    {{ data.technical_skills }}
+
+                                {% else %}
+
+                                    {{ data.technical_skills|join(", ") }}
+
+                                {% endif %}
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <!-- Soft Skills -->
+                        <td>
+
+                            {% if data.soft_skills %}
+
+                                {% if data.soft_skills is string %}
+
+                                    {{ data.soft_skills }}
+
+                                {% else %}
+
+                                    {{ data.soft_skills|join(", ") }}
+
+                                {% endif %}
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <!-- Languages -->
+                        <td>
+
+                            {% if data.languages %}
+
+                                {% if data.languages is string %}
+
+                                    {{ data.languages }}
+
+                                {% else %}
+
+                                    {{ data.languages|join(", ") }}
+
+                                {% endif %}
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if data.linkedin != "NA" and data.linkedin %}
+
+                                <a href="{{ data.linkedin }}" target="_blank">
+                                    LinkedIn
+                                </a>
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if data.github != "NA" and data.github %}
+
+                                <a href="{{ data.github }}" target="_blank">
+                                    GitHub
+                                </a>
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {% if data.portfolio != "NA" and data.portfolio %}
+
+                                <a href="{{ data.portfolio }}" target="_blank">
+                                    Portfolio
+                                </a>
+
+                            {% else %}
+
+                                NA
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <tr>
+
+                        <td colspan="18" class="text-center">
+
+                            No extracted resumes available.
+
+                        </td>
+
+                    </tr>
+
+                {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
